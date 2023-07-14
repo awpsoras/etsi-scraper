@@ -1,6 +1,7 @@
 #packages are defined in app.R
 
-make_etsy_output <- function(shopname) {
+make_etsy_output <- function(shopname, everything) {
+  
   
   shopurl <- paste0('https://www.etsy.com/shop/', shopname)
   
@@ -27,7 +28,6 @@ make_etsy_output <- function(shopname) {
       fromJSON()
   }
   
-  
   #getting all valid listings---------------------------------------------------------------------
   
   isend <- FALSE
@@ -48,6 +48,18 @@ make_etsy_output <- function(shopname) {
   }
   cli_progress_done()
   
+  #if update, make sure we only get what we don't already have-----------------------------------
+  
+  if(everything == FALSE) {
+    etsysummary_prev <- readRDS('etsysummary_prev.rds')
+    all_ids <- all_ids[!(all_ids %in% etsysummary_prev$id)]
+  }
+  
+  if(length(all_ids) == 0){
+    cat('\n\n***No new listings found, returning original!***\n\n')
+    return(etsysummary_prev)
+  }
+  
   #make all the links
   all_links <- makelistinglink(all_ids)
   
@@ -60,9 +72,6 @@ make_etsy_output <- function(shopname) {
     cli_progress_update()
   }
   cli_progress_done()
-  
-  #all_html <- lapply(all_links, read_html)
-  
   
   #get json
   all_json <- lapply(all_html, getlistingjson)
@@ -138,6 +147,7 @@ make_etsy_output <- function(shopname) {
     quantity_to_sell_on_facebook = all_quantities
   )
   
+  if(everything == FALSE) {bind_rows(etsysummary_prev, etsysummary)}
 
 }
 
