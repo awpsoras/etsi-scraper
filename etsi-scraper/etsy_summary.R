@@ -147,7 +147,11 @@ make_etsy_output <- function(shopname, everything) {
     quantity_to_sell_on_facebook = all_quantities
   )
   
-  if(everything == FALSE) {bind_rows(etsysummary_prev, etsysummary)}
+  if(everything == FALSE) {etsysummary <- bind_rows(etsysummary_prev, etsysummary)}
+  
+  saveRDS(etsysummary, 'etsysummary_prev.rds')
+  
+  return(etsysummary)
 
 }
 

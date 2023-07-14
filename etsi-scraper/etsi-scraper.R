@@ -22,15 +22,13 @@ clargs <- commandArgs(trailingOnly=TRUE)
 if(file.exists("etsysummary_prev.rds")){
   
   #looking for update arguments
-  if(any(grepl('something similar', clargs), ignore.case = TRUE) == TRUE){
+  if(any(grepl('something similar', clargs, ignore.case = TRUE) == TRUE)){
     cat('\n\nYes, literally something similar works\n\n')
   }
   
   everything_arguments <- grepl('yes|y|something|similar', clargs, ignore.case = TRUE)
   
-  if(any(everything_arguments == TRUE)) response <- TRUE
-  
-  else response <- FALSE
+  if(any(everything_arguments == TRUE)){response <- TRUE}  else response <- FALSE
   
 } else {response <- TRUE}
 
@@ -67,7 +65,6 @@ etsysummary$google_product_category <- specialfilters(etsysummary)
 etsysummary$availability <- fixinstock(etsysummary)
 etsysummary$fb_product_category <- fixfacebook(etsysummary)
 
-saveRDS(etsysummary, 'etsysummary_prev.rds')
 
 write_to_sheet(etsysummary)
 
