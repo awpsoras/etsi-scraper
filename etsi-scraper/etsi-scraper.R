@@ -68,7 +68,7 @@ etsysummary$fb_product_category <- fixfacebook(etsysummary)
 
 write_to_sheet(etsysummary)
 
-Sys.sleep(3)
+Sys.sleep(5)
 
 
 
